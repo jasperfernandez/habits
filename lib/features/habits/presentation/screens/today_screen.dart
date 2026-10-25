@@ -268,16 +268,6 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                                   totalCount: totalCount,
                                 );
                               },
-                              onArchive: () {
-                                ref
-                                    .read(habitsControllerProvider.notifier)
-                                    .archive(habit.id);
-                              },
-                              onDelete: () {
-                                ref
-                                    .read(habitsControllerProvider.notifier)
-                                    .delete(habit.id);
-                              },
                             );
                           }, childCount: pendingHabits.length),
                         ),
@@ -317,16 +307,6 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                                   completedCount: completedCount,
                                   totalCount: totalCount,
                                 );
-                              },
-                              onArchive: () {
-                                ref
-                                    .read(habitsControllerProvider.notifier)
-                                    .archive(habit.id);
-                              },
-                              onDelete: () {
-                                ref
-                                    .read(habitsControllerProvider.notifier)
-                                    .delete(habit.id);
                               },
                             );
                           }, childCount: completedHabits.length),

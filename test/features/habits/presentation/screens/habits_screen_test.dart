@@ -92,7 +92,7 @@ void main() {
       expect(find.text('Archived'), findsOneWidget);
       expect(find.text('Morning Meditation'), findsOneWidget);
       expect(find.text('Workout'), findsOneWidget);
-      expect(find.text('Hold and drag to reorder routine'), findsOneWidget);
+      expect(find.text('Hold and drag to reorder routine'), findsNothing);
       expect(find.byIcon(Icons.drag_handle_rounded), findsNWidgets(2));
     });
 

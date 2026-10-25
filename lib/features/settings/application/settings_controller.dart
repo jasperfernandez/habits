@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/services/local_notification_service.dart';
 import '../data/preferences_service.dart';
 import '../domain/user_settings.dart';
 
@@ -30,6 +31,7 @@ class SettingsController extends _$SettingsController {
       userName: service.getUserName(),
       themeMode: service.getThemeMode(),
       notificationEnabled: service.getNotificationEnabled(),
+      reminderTime: service.getReminderTime(),
     );
   }
 
@@ -50,15 +52,45 @@ class SettingsController extends _$SettingsController {
     final service = ref.read(preferencesServiceProvider);
     await service.setNotificationEnabled(enabled);
     state = state.copyWith(notificationEnabled: enabled);
+
+    final notificationService = ref.read(localNotificationServiceProvider);
+    if (enabled) {
+      await notificationService.scheduleDailyReminder(
+        time: state.reminderTime,
+        title: 'Time for your habits! ✨',
+        body: 'Take a few minutes to check off your daily routine.',
+      );
+    } else {
+      await notificationService.cancelDailyReminder();
+    }
+  }
+
+  Future<void> setReminderTime(TimeOfDay time) async {
+    final service = ref.read(preferencesServiceProvider);
+    await service.setReminderTime(time);
+    state = state.copyWith(reminderTime: time);
+
+    if (state.notificationEnabled) {
+      final notificationService = ref.read(localNotificationServiceProvider);
+      await notificationService.scheduleDailyReminder(
+        time: time,
+        title: 'Time for your habits! ✨',
+        body: 'Take a few minutes to check off your daily routine.',
+      );
+    }
   }
 
   Future<void> clear() async {
     final service = ref.read(preferencesServiceProvider);
     await service.clear();
+    final notificationService = ref.read(localNotificationServiceProvider);
+    await notificationService.cancelDailyReminder();
+
     state = const UserSettings(
       userName: null,
       themeMode: ThemeMode.light,
-      notificationEnabled: true,
+      notificationEnabled: false,
+      reminderTime: TimeOfDay(hour: 9, minute: 0),
     );
   }
 }

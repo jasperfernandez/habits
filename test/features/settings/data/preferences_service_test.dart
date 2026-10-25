@@ -12,7 +12,7 @@ void main() {
 
       expect(service.getUserName(), isNull);
       expect(service.getThemeMode(), ThemeMode.light);
-      expect(service.getNotificationEnabled(), isTrue);
+      expect(service.getNotificationEnabled(), isFalse);
     });
 
     test('stores and retrieves user name', () async {
@@ -53,6 +53,19 @@ void main() {
       expect(prefs.getBool('notification_enabled'), isTrue);
     });
 
+    test('stores and retrieves reminder time', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final service = SharedPreferencesService(prefs);
+
+      expect(service.getReminderTime(), const TimeOfDay(hour: 9, minute: 0));
+
+      await service.setReminderTime(const TimeOfDay(hour: 20, minute: 30));
+      expect(service.getReminderTime(), const TimeOfDay(hour: 20, minute: 30));
+      expect(prefs.getInt('reminder_hour'), 20);
+      expect(prefs.getInt('reminder_minute'), 30);
+    });
+
     test('clears all preferences', () async {
       SharedPreferences.setMockInitialValues({
         'user_name': 'Alice',
@@ -66,7 +79,7 @@ void main() {
 
       expect(service.getUserName(), isNull);
       expect(service.getThemeMode(), ThemeMode.light);
-      expect(service.getNotificationEnabled(), isTrue);
+      expect(service.getNotificationEnabled(), isFalse);
     });
   });
 
@@ -76,20 +89,24 @@ void main() {
 
       expect(service.getUserName(), isNull);
       expect(service.getThemeMode(), ThemeMode.light);
-      expect(service.getNotificationEnabled(), isTrue);
+      expect(service.getNotificationEnabled(), isFalse);
+      expect(service.getReminderTime(), const TimeOfDay(hour: 9, minute: 0));
 
       await service.setUserName('Bob');
       await service.setThemeMode(ThemeMode.dark);
       await service.setNotificationEnabled(false);
+      await service.setReminderTime(const TimeOfDay(hour: 7, minute: 15));
 
       expect(service.getUserName(), 'Bob');
       expect(service.getThemeMode(), ThemeMode.dark);
       expect(service.getNotificationEnabled(), isFalse);
+      expect(service.getReminderTime(), const TimeOfDay(hour: 7, minute: 15));
 
       await service.clear();
       expect(service.getUserName(), isNull);
       expect(service.getThemeMode(), ThemeMode.light);
-      expect(service.getNotificationEnabled(), isTrue);
+      expect(service.getNotificationEnabled(), isFalse);
+      expect(service.getReminderTime(), const TimeOfDay(hour: 9, minute: 0));
     });
   });
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/services/notification_permission_service.dart';
 import '../../../../core/theme/app_color_scheme.dart';
 import '../../../habits/application/controllers/habits_controller.dart';
 import '../../application/settings_controller.dart';
@@ -47,6 +48,54 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _toggleDailyReminders(bool enable) async {
+    if (!enable) {
+      await ref
+          .read(settingsControllerProvider.notifier)
+          .setNotificationEnabled(false);
+      return;
+    }
+
+    final permissionService = ref.read(notificationPermissionServiceProvider);
+    final result = await permissionService.requestPermission();
+
+    if (!mounted) return;
+    final messenger = ScaffoldMessenger.of(context);
+
+    if (result == NotificationPermissionResult.granted) {
+      await ref
+          .read(settingsControllerProvider.notifier)
+          .setNotificationEnabled(true);
+      if (!mounted) return;
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Daily reminders enabled!'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } else if (result == NotificationPermissionResult.permanentlyDenied) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: const Text(
+            'Notification permission is disabled in system settings.',
+          ),
+          behavior: SnackBarBehavior.floating,
+          action: SnackBarAction(
+            label: 'Settings',
+            onPressed: () => permissionService.openAppSettings(),
+          ),
+        ),
+      );
+    } else {
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Notification permission was not granted.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   @override
@@ -168,12 +217,59 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ),
                   value: userSettings.notificationEnabled,
                   activeThumbColor: AppColors.primary,
-                  onChanged: (val) {
-                    ref
-                        .read(settingsControllerProvider.notifier)
-                        .setNotificationEnabled(val);
-                  },
+                  onChanged: _toggleDailyReminders,
                 ),
+                if (userSettings.notificationEnabled) ...[
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.schedule_rounded,
+                      color: AppColors.primary,
+                    ),
+                    title: const Text(
+                      'Reminder Time',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    subtitle: const Text(
+                      'When to receive your daily habit reminder',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    trailing: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: AppColors.surfaceVariant,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () async {
+                        final picked = await showTimePicker(
+                          context: context,
+                          initialTime: userSettings.reminderTime,
+                        );
+                        if (picked != null) {
+                          await ref
+                              .read(settingsControllerProvider.notifier)
+                              .setReminderTime(picked);
+                        }
+                      },
+                      child: Text(
+                        userSettings.reminderTime.format(context),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
                 const Divider(height: 1),
                 ListTile(
                   title: const Text(

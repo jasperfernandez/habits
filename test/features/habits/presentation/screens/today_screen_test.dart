@@ -160,6 +160,45 @@ void main() {
       expect(find.textContaining('All habits completed for today!'), findsOneWidget);
     });
 
+    testWidgets('does not show archive or delete menu on habit cards in TodayScreen', (tester) async {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+
+      final habits = [
+        Habit(
+          id: 'h1',
+          name: 'Morning Jog',
+          frequency: HabitFrequency.daily,
+          scheduledWeekdays: const {},
+          createdAt: today,
+          startDate: today,
+        ),
+      ];
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            habitsControllerProvider.overrideWith(
+              () => _FakeHabitsController(habits),
+            ),
+            completionsForDateProvider.overrideWith(
+              (ref, date) => Stream.value(<HabitCompletion>[]),
+            ),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.light,
+            home: const TodayScreen(),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Morning Jog'), findsOneWidget);
+      expect(find.byType(PopupMenuButton<String>), findsNothing);
+      expect(find.byIcon(Icons.more_vert_rounded), findsNothing);
+    });
+
     testWidgets('has no FAB and opens add habit sheet via empty state button', (tester) async {
       await tester.pumpWidget(
         ProviderScope(

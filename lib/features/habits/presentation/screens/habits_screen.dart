@@ -269,14 +269,11 @@ class _ActiveHabitsTab extends StatelessWidget {
       );
     }
 
-    return Column(
-      children: [
-        Expanded(
-          child: ReorderableListView.builder(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
-            itemCount: habits.length,
-            onReorderItem: onReorder,
-            itemBuilder: (context, index) {
+    return ReorderableListView.builder(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
+      itemCount: habits.length,
+      onReorderItem: onReorder,
+      itemBuilder: (context, index) {
               final habit = habits[index];
               return Card(
                 key: ValueKey(habit.id),
@@ -408,10 +405,7 @@ class _ActiveHabitsTab extends StatelessWidget {
                 ),
               );
             },
-          ),
-        ),
-      ],
-    );
+          );
   }
 }
 

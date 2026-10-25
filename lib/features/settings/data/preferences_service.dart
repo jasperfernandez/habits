@@ -11,6 +11,9 @@ abstract interface class PreferencesService {
   bool getNotificationEnabled();
   Future<void> setNotificationEnabled(bool enabled);
 
+  TimeOfDay getReminderTime();
+  Future<void> setReminderTime(TimeOfDay time);
+
   Future<void> clear();
 }
 
@@ -22,6 +25,8 @@ class SharedPreferencesService implements PreferencesService {
   static const String keyUserName = 'user_name';
   static const String keyThemeMode = 'theme_mode';
   static const String keyNotificationEnabled = 'notification_enabled';
+  static const String keyReminderHour = 'reminder_hour';
+  static const String keyReminderMinute = 'reminder_minute';
 
   @override
   String? getUserName() {
@@ -66,7 +71,7 @@ class SharedPreferencesService implements PreferencesService {
 
   @override
   bool getNotificationEnabled() {
-    return _prefs.getBool(keyNotificationEnabled) ?? true;
+    return _prefs.getBool(keyNotificationEnabled) ?? false;
   }
 
   @override
@@ -75,10 +80,25 @@ class SharedPreferencesService implements PreferencesService {
   }
 
   @override
+  TimeOfDay getReminderTime() {
+    final hour = _prefs.getInt(keyReminderHour) ?? 9;
+    final minute = _prefs.getInt(keyReminderMinute) ?? 0;
+    return TimeOfDay(hour: hour, minute: minute);
+  }
+
+  @override
+  Future<void> setReminderTime(TimeOfDay time) async {
+    await _prefs.setInt(keyReminderHour, time.hour);
+    await _prefs.setInt(keyReminderMinute, time.minute);
+  }
+
+  @override
   Future<void> clear() async {
     await _prefs.remove(keyUserName);
     await _prefs.remove(keyThemeMode);
     await _prefs.remove(keyNotificationEnabled);
+    await _prefs.remove(keyReminderHour);
+    await _prefs.remove(keyReminderMinute);
   }
 }
 
@@ -86,14 +106,17 @@ class InMemoryPreferencesService implements PreferencesService {
   InMemoryPreferencesService({
     String? initialUserName,
     ThemeMode initialThemeMode = ThemeMode.light,
-    bool initialNotificationEnabled = true,
+    bool initialNotificationEnabled = false,
+    TimeOfDay initialReminderTime = const TimeOfDay(hour: 9, minute: 0),
   })  : _userName = initialUserName,
         _themeMode = initialThemeMode,
-        _notificationEnabled = initialNotificationEnabled;
+        _notificationEnabled = initialNotificationEnabled,
+        _reminderTime = initialReminderTime;
 
   String? _userName;
   ThemeMode _themeMode;
   bool _notificationEnabled;
+  TimeOfDay _reminderTime;
 
   @override
   String? getUserName() => _userName;
@@ -120,9 +143,18 @@ class InMemoryPreferencesService implements PreferencesService {
   }
 
   @override
+  TimeOfDay getReminderTime() => _reminderTime;
+
+  @override
+  Future<void> setReminderTime(TimeOfDay time) async {
+    _reminderTime = time;
+  }
+
+  @override
   Future<void> clear() async {
     _userName = null;
     _themeMode = ThemeMode.light;
-    _notificationEnabled = true;
+    _notificationEnabled = false;
+    _reminderTime = const TimeOfDay(hour: 9, minute: 0);
   }
 }
