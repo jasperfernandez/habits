@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habits/core/theme/app_theme.dart';
 import 'package:habits/features/habits/presentation/widgets/greeting_header.dart';
@@ -12,13 +12,12 @@ void main() {
   }
 
   group('GreetingHeader', () {
-    testWidgets('shows Good morning and sun icon during morning hours', (tester) async {
+    testWidgets('shows Good morning and sun icon during morning hours', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         buildWidget(
-          GreetingHeader(
-            name: 'Jasper',
-            time: DateTime(2026, 10, 24, 8, 30),
-          ),
+          GreetingHeader(name: 'Jasper', time: DateTime(2026, 10, 24, 8, 30)),
         ),
       );
 
@@ -27,13 +26,12 @@ void main() {
       expect(find.byIcon(Icons.nightlight_round), findsNothing);
     });
 
-    testWidgets('shows Good noon and sun icon during afternoon hours', (tester) async {
+    testWidgets('shows Good noon and sun icon during afternoon hours', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         buildWidget(
-          GreetingHeader(
-            name: 'Jasper',
-            time: DateTime(2026, 10, 24, 13, 0),
-          ),
+          GreetingHeader(name: 'Jasper', time: DateTime(2026, 10, 24, 13, 0)),
         ),
       );
 
@@ -42,13 +40,12 @@ void main() {
       expect(find.byIcon(Icons.nightlight_round), findsNothing);
     });
 
-    testWidgets('shows Good evening and moon icon during evening hours', (tester) async {
+    testWidgets('shows Good evening and moon icon during evening hours', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         buildWidget(
-          GreetingHeader(
-            name: 'Jasper',
-            time: DateTime(2026, 10, 24, 19, 45),
-          ),
+          GreetingHeader(name: 'Jasper', time: DateTime(2026, 10, 24, 19, 45)),
         ),
       );
 
@@ -57,13 +54,12 @@ void main() {
       expect(find.byIcon(Icons.wb_sunny_rounded), findsNothing);
     });
 
-    testWidgets('shows Good evening and moon icon during late night hours', (tester) async {
+    testWidgets('shows Good evening and moon icon during late night hours', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         buildWidget(
-          GreetingHeader(
-            name: 'Jasper',
-            time: DateTime(2026, 10, 24, 2, 15),
-          ),
+          GreetingHeader(name: 'Jasper', time: DateTime(2026, 10, 24, 2, 15)),
         ),
       );
 
@@ -74,10 +70,7 @@ void main() {
     testWidgets('handles empty or null name prop', (tester) async {
       await tester.pumpWidget(
         buildWidget(
-          GreetingHeader(
-            name: null,
-            time: DateTime(2026, 10, 24, 9, 0),
-          ),
+          GreetingHeader(name: null, time: DateTime(2026, 10, 24, 9, 0)),
         ),
       );
 

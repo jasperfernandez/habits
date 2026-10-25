@@ -35,8 +35,14 @@ class HabitsController extends _$HabitsController {
     }
   }
 
-  Future<void> reorder(int oldIndex, int newIndex, List<Habit> activeHabits) async {
-    if (activeHabits.isEmpty || oldIndex < 0 || oldIndex >= activeHabits.length) {
+  Future<void> reorder(
+    int oldIndex,
+    int newIndex,
+    List<Habit> activeHabits,
+  ) async {
+    if (activeHabits.isEmpty ||
+        oldIndex < 0 ||
+        oldIndex >= activeHabits.length) {
       return;
     }
     final items = List<Habit>.from(activeHabits);

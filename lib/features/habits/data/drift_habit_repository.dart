@@ -13,15 +13,12 @@ class DriftHabitRepository implements HabitRepository {
 
   @override
   Stream<List<Habit>> watchHabits() {
-    return (_database.select(_database.habits)
-          ..orderBy([
-            (table) => OrderingTerm.asc(table.sortOrder),
-            (table) => OrderingTerm.asc(table.createdAt),
-          ]))
+    return (_database.select(_database.habits)..orderBy([
+          (table) => OrderingTerm.asc(table.sortOrder),
+          (table) => OrderingTerm.asc(table.createdAt),
+        ]))
         .watch()
-        .map(
-          (rows) => rows.map(_toEntity).toList(),
-        );
+        .map((rows) => rows.map(_toEntity).toList());
   }
 
   @override
@@ -36,40 +33,30 @@ class DriftHabitRepository implements HabitRepository {
 
   @override
   Future<String> create(Habit habit) async {
-    await _database.into(_database.habits).insert(
-          _toCompanion(habit),
-        );
+    await _database.into(_database.habits).insert(_toCompanion(habit));
 
     return habit.id;
   }
 
   @override
   Future<void> update(Habit habit) async {
-    await (_database.update(_database.habits)
-          ..where((table) => table.id.equals(habit.id)))
-        .write(_toCompanion(habit));
+    await (_database.update(
+      _database.habits,
+    )..where((table) => table.id.equals(habit.id))).write(_toCompanion(habit));
   }
 
   @override
   Future<void> archive(String id) async {
     await (_database.update(_database.habits)
           ..where((table) => table.id.equals(id)))
-        .write(
-      db.HabitsCompanion(
-        archivedAt: Value(DateTime.now()),
-      ),
-    );
+        .write(db.HabitsCompanion(archivedAt: Value(DateTime.now())));
   }
 
   @override
   Future<void> unarchive(String id) async {
     await (_database.update(_database.habits)
           ..where((table) => table.id.equals(id)))
-        .write(
-      const db.HabitsCompanion(
-        archivedAt: Value(null),
-      ),
-    );
+        .write(const db.HabitsCompanion(archivedAt: Value(null)));
   }
 
   @override
@@ -85,9 +72,9 @@ class DriftHabitRepository implements HabitRepository {
 
   @override
   Future<void> delete(String id) async {
-    await (_database.delete(_database.habits)
-          ..where((table) => table.id.equals(id)))
-        .go();
+    await (_database.delete(
+      _database.habits,
+    )..where((table) => table.id.equals(id))).go();
   }
 
   Habit _toEntity(db.Habit row) {

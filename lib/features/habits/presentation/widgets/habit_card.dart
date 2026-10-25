@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_color_scheme.dart';
 import '../../application/providers/habit_providers.dart';
@@ -65,11 +65,9 @@ class HabitCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final effectiveDate = date ?? DateTime.now();
-    final effectiveStreak = streak ??
-        ref
-            .watch(habitStreakProvider(habit.id, effectiveDate))
-            .asData
-            ?.value ??
+    final effectiveStreak =
+        streak ??
+        ref.watch(habitStreakProvider(habit.id, effectiveDate)).asData?.value ??
         0;
 
     final hasMenu = onArchive != null || onDelete != null;
@@ -108,9 +106,7 @@ class HabitCard extends ConsumerWidget {
                   height: 28,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isCompleted
-                        ? AppColors.primary
-                        : Colors.transparent,
+                    color: isCompleted ? AppColors.primary : Colors.transparent,
                     border: Border.all(
                       color: isCompleted
                           ? AppColors.primary
@@ -146,8 +142,9 @@ class HabitCard extends ConsumerWidget {
                         decoration: isCompleted
                             ? TextDecoration.lineThrough
                             : null,
-                        decorationColor:
-                            AppColors.textSecondary.withValues(alpha: 0.6),
+                        decorationColor: AppColors.textSecondary.withValues(
+                          alpha: 0.6,
+                        ),
                       ),
                     ),
                     if (habit.description != null &&

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habits/core/theme/app_theme.dart';
@@ -40,10 +40,7 @@ void main() {
               (ref, date) => Stream.value(<HabitCompletion>[]),
             ),
           ],
-          child: MaterialApp(
-            theme: AppTheme.light,
-            home: const TodayScreen(),
-          ),
+          child: MaterialApp(theme: AppTheme.light, home: const TodayScreen()),
         ),
       );
 
@@ -95,14 +92,9 @@ void main() {
             completionsForDateProvider.overrideWith(
               (ref, date) => Stream.value(completions),
             ),
-            habitStreakProvider.overrideWith(
-              (ref, args) => Future.value(1),
-            ),
+            habitStreakProvider.overrideWith((ref, args) => Future.value(1)),
           ],
-          child: MaterialApp(
-            theme: AppTheme.light,
-            home: const TodayScreen(),
-          ),
+          child: MaterialApp(theme: AppTheme.light, home: const TodayScreen()),
         ),
       );
 
@@ -116,7 +108,9 @@ void main() {
       expect(find.text('50%'), findsOneWidget);
     });
 
-    testWidgets('shows celebratory SnackBar when completing the final habit', (tester) async {
+    testWidgets('shows celebratory SnackBar when completing the final habit', (
+      tester,
+    ) async {
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
 
@@ -140,14 +134,9 @@ void main() {
             completionsForDateProvider.overrideWith(
               (ref, date) => Stream.value(<HabitCompletion>[]),
             ),
-            habitStreakProvider.overrideWith(
-              (ref, args) => Future.value(1),
-            ),
+            habitStreakProvider.overrideWith((ref, args) => Future.value(1)),
           ],
-          child: MaterialApp(
-            theme: AppTheme.light,
-            home: const TodayScreen(),
-          ),
+          child: MaterialApp(theme: AppTheme.light, home: const TodayScreen()),
         ),
       );
 
@@ -157,49 +146,57 @@ void main() {
       await tester.tap(find.text('Morning Jog'));
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('All habits completed for today!'), findsOneWidget);
-    });
-
-    testWidgets('does not show archive or delete menu on habit cards in TodayScreen', (tester) async {
-      final now = DateTime.now();
-      final today = DateTime(now.year, now.month, now.day);
-
-      final habits = [
-        Habit(
-          id: 'h1',
-          name: 'Morning Jog',
-          frequency: HabitFrequency.daily,
-          scheduledWeekdays: const {},
-          createdAt: today,
-          startDate: today,
-        ),
-      ];
-
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            habitsControllerProvider.overrideWith(
-              () => _FakeHabitsController(habits),
-            ),
-            completionsForDateProvider.overrideWith(
-              (ref, date) => Stream.value(<HabitCompletion>[]),
-            ),
-          ],
-          child: MaterialApp(
-            theme: AppTheme.light,
-            home: const TodayScreen(),
-          ),
-        ),
+      expect(
+        find.textContaining('All habits completed for today!'),
+        findsOneWidget,
       );
-
-      await tester.pumpAndSettle();
-
-      expect(find.text('Morning Jog'), findsOneWidget);
-      expect(find.byType(PopupMenuButton<String>), findsNothing);
-      expect(find.byIcon(Icons.more_vert_rounded), findsNothing);
     });
 
-    testWidgets('has no FAB and opens add habit sheet via empty state button', (tester) async {
+    testWidgets(
+      'does not show archive or delete menu on habit cards in TodayScreen',
+      (tester) async {
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
+
+        final habits = [
+          Habit(
+            id: 'h1',
+            name: 'Morning Jog',
+            frequency: HabitFrequency.daily,
+            scheduledWeekdays: const {},
+            createdAt: today,
+            startDate: today,
+          ),
+        ];
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              habitsControllerProvider.overrideWith(
+                () => _FakeHabitsController(habits),
+              ),
+              completionsForDateProvider.overrideWith(
+                (ref, date) => Stream.value(<HabitCompletion>[]),
+              ),
+            ],
+            child: MaterialApp(
+              theme: AppTheme.light,
+              home: const TodayScreen(),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        expect(find.text('Morning Jog'), findsOneWidget);
+        expect(find.byType(PopupMenuButton<String>), findsNothing);
+        expect(find.byIcon(Icons.more_vert_rounded), findsNothing);
+      },
+    );
+
+    testWidgets('has no FAB and opens add habit sheet via empty state button', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -210,10 +207,7 @@ void main() {
               (ref, date) => Stream.value(<HabitCompletion>[]),
             ),
           ],
-          child: MaterialApp(
-            theme: AppTheme.light,
-            home: const TodayScreen(),
-          ),
+          child: MaterialApp(theme: AppTheme.light, home: const TodayScreen()),
         ),
       );
 

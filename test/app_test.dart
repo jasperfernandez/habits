@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habits/app.dart';
@@ -18,39 +18,46 @@ class _FakeHabitsController extends HabitsController {
 
 void main() {
   group('App', () {
-    testWidgets('shows WelcomeScreen on first launch when user name is not set', (tester) async {
-      final inMemory = InMemoryPreferencesService();
+    testWidgets(
+      'shows WelcomeScreen on first launch when user name is not set',
+      (tester) async {
+        final inMemory = InMemoryPreferencesService();
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              preferencesServiceProvider.overrideWithValue(inMemory),
+              habitsControllerProvider.overrideWith(
+                () => _FakeHabitsController(),
+              ),
+              completionsForDateProvider.overrideWith(
+                (ref, date) => Stream.value(<HabitCompletion>[]),
+              ),
+            ],
+            child: const App(),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        expect(find.byType(WelcomeScreen), findsOneWidget);
+        expect(find.byType(MainScreen), findsNothing);
+        expect(find.text('Welcome to Habits'), findsOneWidget);
+      },
+    );
+
+    testWidgets('shows MainScreen when onboarding is already completed', (
+      tester,
+    ) async {
+      final inMemory = InMemoryPreferencesService(initialUserName: 'Jasper');
 
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             preferencesServiceProvider.overrideWithValue(inMemory),
-            habitsControllerProvider.overrideWith(() => _FakeHabitsController()),
-            completionsForDateProvider.overrideWith(
-              (ref, date) => Stream.value(<HabitCompletion>[]),
+            habitsControllerProvider.overrideWith(
+              () => _FakeHabitsController(),
             ),
-          ],
-          child: const App(),
-        ),
-      );
-
-      await tester.pumpAndSettle();
-
-      expect(find.byType(WelcomeScreen), findsOneWidget);
-      expect(find.byType(MainScreen), findsNothing);
-      expect(find.text('Welcome to Habits'), findsOneWidget);
-    });
-
-    testWidgets('shows MainScreen when onboarding is already completed', (tester) async {
-      final inMemory = InMemoryPreferencesService(
-        initialUserName: 'Jasper',
-      );
-
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            preferencesServiceProvider.overrideWithValue(inMemory),
-            habitsControllerProvider.overrideWith(() => _FakeHabitsController()),
             completionsForDateProvider.overrideWith(
               (ref, date) => Stream.value(<HabitCompletion>[]),
             ),
@@ -63,36 +70,44 @@ void main() {
 
       expect(find.byType(MainScreen), findsOneWidget);
       expect(find.byType(WelcomeScreen), findsNothing);
-      expect(find.textContaining('Jasper'), findsOneWidget); // In GreetingHeader
+      expect(
+        find.textContaining('Jasper'),
+        findsOneWidget,
+      ); // In GreetingHeader
     });
 
-    testWidgets('seamlessly transitions from WelcomeScreen to MainScreen after entering name', (tester) async {
-      final inMemory = InMemoryPreferencesService();
+    testWidgets(
+      'seamlessly transitions from WelcomeScreen to MainScreen after entering name',
+      (tester) async {
+        final inMemory = InMemoryPreferencesService();
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            preferencesServiceProvider.overrideWithValue(inMemory),
-            habitsControllerProvider.overrideWith(() => _FakeHabitsController()),
-            completionsForDateProvider.overrideWith(
-              (ref, date) => Stream.value(<HabitCompletion>[]),
-            ),
-          ],
-          child: const App(),
-        ),
-      );
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              preferencesServiceProvider.overrideWithValue(inMemory),
+              habitsControllerProvider.overrideWith(
+                () => _FakeHabitsController(),
+              ),
+              completionsForDateProvider.overrideWith(
+                (ref, date) => Stream.value(<HabitCompletion>[]),
+              ),
+            ],
+            child: const App(),
+          ),
+        );
 
-      await tester.pumpAndSettle();
-      expect(find.byType(WelcomeScreen), findsOneWidget);
+        await tester.pumpAndSettle();
+        expect(find.byType(WelcomeScreen), findsOneWidget);
 
-      await tester.enterText(find.byType(TextFormField), 'Jasper');
-      await tester.tap(find.text('Get Started'));
-      await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextFormField), 'Jasper');
+        await tester.tap(find.text('Get Started'));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(MainScreen), findsOneWidget);
-      expect(find.byType(WelcomeScreen), findsNothing);
-      expect(find.textContaining('Jasper'), findsOneWidget);
-    });
+        expect(find.byType(MainScreen), findsOneWidget);
+        expect(find.byType(WelcomeScreen), findsNothing);
+        expect(find.textContaining('Jasper'), findsOneWidget);
+      },
+    );
 
     testWidgets('applies dark theme mode correctly', (tester) async {
       final inMemory = InMemoryPreferencesService(
@@ -104,7 +119,9 @@ void main() {
         ProviderScope(
           overrides: [
             preferencesServiceProvider.overrideWithValue(inMemory),
-            habitsControllerProvider.overrideWith(() => _FakeHabitsController()),
+            habitsControllerProvider.overrideWith(
+              () => _FakeHabitsController(),
+            ),
             completionsForDateProvider.overrideWith(
               (ref, date) => Stream.value(<HabitCompletion>[]),
             ),

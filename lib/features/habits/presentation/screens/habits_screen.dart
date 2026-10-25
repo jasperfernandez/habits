@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -274,138 +274,135 @@ class _ActiveHabitsTab extends StatelessWidget {
       itemCount: habits.length,
       onReorderItem: onReorder,
       itemBuilder: (context, index) {
-              final habit = habits[index];
-              return Card(
-                key: ValueKey(habit.id),
-                margin: const EdgeInsets.symmetric(vertical: 4),
-                color: AppColors.surface,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  side: const BorderSide(color: AppColors.outline),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 12,
+        final habit = habits[index];
+        return Card(
+          key: ValueKey(habit.id),
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          color: AppColors.surface,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+            side: const BorderSide(color: AppColors.outline),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Row(
+              children: [
+                // Reorder drag start handle
+                ReorderableDragStartListener(
+                  index: index,
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 12),
+                    child: Icon(
+                      Icons.drag_handle_rounded,
+                      color: AppColors.textSecondary,
+                      size: 22,
+                    ),
                   ),
-                  child: Row(
+                ),
+
+                // Content
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Reorder drag start handle
-                      ReorderableDragStartListener(
-                        index: index,
-                        child: const Padding(
-                          padding: EdgeInsets.only(right: 12),
-                          child: Icon(
-                            Icons.drag_handle_rounded,
+                      Text(
+                        habit.name,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      if (habit.description != null &&
+                          habit.description!.trim().isNotEmpty) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          habit.description!.trim(),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 12,
                             color: AppColors.textSecondary,
-                            size: 22,
                           ),
                         ),
-                      ),
-
-                      // Content
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              habit.name,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textPrimary,
-                              ),
-                            ),
-                            if (habit.description != null &&
-                                habit.description!.trim().isNotEmpty) ...[
-                              const SizedBox(height: 2),
-                              Text(
-                                habit.description!.trim(),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.textSecondary,
-                                ),
-                              ),
-                            ],
-                            const SizedBox(height: 6),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.surfaceVariant,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                formatFrequency(habit),
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.textSecondary,
-                                ),
-                              ),
-                            ),
-                          ],
+                      ],
+                      const SizedBox(height: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
                         ),
-                      ),
-
-                      // Actions Menu
-                      PopupMenuButton<String>(
-                        icon: const Icon(
-                          Icons.more_vert_rounded,
-                          size: 20,
-                          color: AppColors.textSecondary,
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceVariant,
+                          borderRadius: BorderRadius.circular(6),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        onSelected: (value) {
-                          if (value == 'archive') {
-                            onArchive(habit.id);
-                          } else if (value == 'delete') {
-                            onDelete(habit.id);
-                          }
-                        },
-                        itemBuilder: (context) => [
-                          const PopupMenuItem(
-                            value: 'archive',
-                            child: Row(
-                              children: [
-                                Icon(Icons.archive_outlined, size: 18),
-                                SizedBox(width: 8),
-                                Text('Archive'),
-                              ],
-                            ),
+                        child: Text(
+                          formatFrequency(habit),
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.textSecondary,
                           ),
-                          const PopupMenuItem(
-                            value: 'delete',
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.delete_outline_rounded,
-                                  size: 18,
-                                  color: AppColors.error,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Delete',
-                                  style: TextStyle(color: AppColors.error),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              );
-            },
-          );
+
+                // Actions Menu
+                PopupMenuButton<String>(
+                  icon: const Icon(
+                    Icons.more_vert_rounded,
+                    size: 20,
+                    color: AppColors.textSecondary,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  onSelected: (value) {
+                    if (value == 'archive') {
+                      onArchive(habit.id);
+                    } else if (value == 'delete') {
+                      onDelete(habit.id);
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(
+                      value: 'archive',
+                      child: Row(
+                        children: [
+                          Icon(Icons.archive_outlined, size: 18),
+                          SizedBox(width: 8),
+                          Text('Archive'),
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: 'delete',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.delete_outline_rounded,
+                            size: 18,
+                            color: AppColors.error,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            'Delete',
+                            style: TextStyle(color: AppColors.error),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habits/core/theme/app_theme.dart';
@@ -18,7 +18,9 @@ class _FakeHabitsController extends HabitsController {
 
 void main() {
   group('MainScreen Navigation', () {
-    testWidgets('renders 3 bottom navigation destinations and switches tabs', (tester) async {
+    testWidgets('renders 3 bottom navigation destinations and switches tabs', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -29,10 +31,7 @@ void main() {
               (ref, date) => Stream.value(<HabitCompletion>[]),
             ),
           ],
-          child: MaterialApp(
-            theme: AppTheme.light,
-            home: const MainScreen(),
-          ),
+          child: MaterialApp(theme: AppTheme.light, home: const MainScreen()),
         ),
       );
 

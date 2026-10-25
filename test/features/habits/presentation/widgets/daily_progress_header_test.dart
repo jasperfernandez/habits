@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habits/core/theme/app_theme.dart';
 import 'package:habits/features/habits/presentation/widgets/daily_progress_header.dart';
@@ -12,7 +12,9 @@ void main() {
   }
 
   group('DailyProgressHeader', () {
-    testWidgets('displays date and 0 of 0 completed when 0 habits', (tester) async {
+    testWidgets('displays date and 0 of 0 completed when 0 habits', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         buildWidget(
           DailyProgressHeader(
@@ -28,7 +30,9 @@ void main() {
       expect(find.text('0%'), findsOneWidget);
     });
 
-    testWidgets('displays correct percentage and completed count', (tester) async {
+    testWidgets('displays correct percentage and completed count', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         buildWidget(
           DailyProgressHeader(
@@ -43,7 +47,9 @@ void main() {
       expect(find.text('75%'), findsOneWidget);
     });
 
-    testWidgets('displays 100% and check icon when all habits completed', (tester) async {
+    testWidgets('displays 100% and check icon when all habits completed', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         buildWidget(
           DailyProgressHeader(

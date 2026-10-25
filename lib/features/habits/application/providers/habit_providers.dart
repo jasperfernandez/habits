@@ -38,8 +38,9 @@ Future<int> habitStreak(Ref ref, String habitId, DateTime date) async {
 
   final habit = await ref.watch(habitRepositoryProvider).getById(habitId);
   if (habit == null) return 0;
-  final completions =
-      await ref.watch(habitCompletionRepositoryProvider).getByHabitId(habitId);
+  final completions = await ref
+      .watch(habitCompletionRepositoryProvider)
+      .getByHabitId(habitId);
   return StreakCalculator.calculateStreak(
     habit: habit,
     completions: completions,

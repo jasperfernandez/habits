@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habits/core/theme/app_theme.dart';
@@ -13,9 +13,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            preferencesServiceProvider.overrideWithValue(inMemory),
-          ],
+          overrides: [preferencesServiceProvider.overrideWithValue(inMemory)],
           child: MaterialApp(
             theme: AppTheme.light,
             home: const WelcomeScreen(),
@@ -37,9 +35,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            preferencesServiceProvider.overrideWithValue(inMemory),
-          ],
+          overrides: [preferencesServiceProvider.overrideWithValue(inMemory)],
           child: MaterialApp(
             theme: AppTheme.light,
             home: const WelcomeScreen(),
@@ -62,9 +58,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            preferencesServiceProvider.overrideWithValue(inMemory),
-          ],
+          overrides: [preferencesServiceProvider.overrideWithValue(inMemory)],
           child: MaterialApp(
             theme: AppTheme.light,
             home: const WelcomeScreen(),

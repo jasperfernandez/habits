@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -12,15 +13,12 @@ abstract interface class LocalNotificationService {
     required String body,
   });
   Future<void> cancelDailyReminder();
-  Future<void> showNotification({
-    required String title,
-    required String body,
-  });
+  Future<void> showNotification({required String title, required String body});
 }
 
 class FlutterLocalNotificationService implements LocalNotificationService {
   FlutterLocalNotificationService([FlutterLocalNotificationsPlugin? plugin])
-      : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
+    : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
   final FlutterLocalNotificationsPlugin _plugin;
   bool _initialized = false;
@@ -38,8 +36,9 @@ class FlutterLocalNotificationService implements LocalNotificationService {
     try {
       tz.initializeTimeZones();
 
-      const androidSettings =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
+      const androidSettings = AndroidInitializationSettings(
+        '@mipmap/ic_launcher',
+      );
       const darwinSettings = DarwinInitializationSettings(
         requestAlertPermission: false,
         requestBadgePermission: false,
@@ -189,7 +188,8 @@ class FakeLocalNotificationService implements LocalNotificationService {
   }
 }
 
-final localNotificationServiceProvider =
-    Provider<LocalNotificationService>((ref) {
+final localNotificationServiceProvider = Provider<LocalNotificationService>((
+  ref,
+) {
   return FlutterLocalNotificationService();
 });

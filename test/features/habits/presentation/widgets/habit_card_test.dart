@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habits/core/theme/app_theme.dart';
@@ -27,7 +27,9 @@ void main() {
       startDate: DateTime(2026, 10, 1),
     );
 
-    testWidgets('renders habit name, description, frequency, and streak', (tester) async {
+    testWidgets('renders habit name, description, frequency, and streak', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         buildWidget(
           HabitCard(
@@ -80,12 +82,18 @@ void main() {
       expect(toggled, isTrue);
     });
 
-    testWidgets('displays selected weekdays frequency correctly', (tester) async {
+    testWidgets('displays selected weekdays frequency correctly', (
+      tester,
+    ) async {
       final mwfHabit = Habit(
         id: 'h2',
         name: 'Gym Workout',
         frequency: HabitFrequency.selectedWeekdays,
-        scheduledWeekdays: const {DateTime.monday, DateTime.wednesday, DateTime.friday},
+        scheduledWeekdays: const {
+          DateTime.monday,
+          DateTime.wednesday,
+          DateTime.friday,
+        },
         createdAt: DateTime(2026, 10, 1),
         startDate: DateTime(2026, 10, 1),
       );

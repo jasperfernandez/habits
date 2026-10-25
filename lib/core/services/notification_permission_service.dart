@@ -1,11 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart' as ph;
 
-enum NotificationPermissionResult {
-  granted,
-  denied,
-  permanentlyDenied,
-}
+enum NotificationPermissionResult { granted, denied, permanentlyDenied }
 
 abstract interface class NotificationPermissionService {
   Future<NotificationPermissionResult> requestPermission();
@@ -13,7 +9,8 @@ abstract interface class NotificationPermissionService {
   Future<bool> openAppSettings();
 }
 
-class SystemNotificationPermissionService implements NotificationPermissionService {
+class SystemNotificationPermissionService
+    implements NotificationPermissionService {
   const SystemNotificationPermissionService();
 
   @override
@@ -42,5 +39,5 @@ class SystemNotificationPermissionService implements NotificationPermissionServi
 
 final notificationPermissionServiceProvider =
     Provider<NotificationPermissionService>((ref) {
-  return const SystemNotificationPermissionService();
-});
+      return const SystemNotificationPermissionService();
+    });

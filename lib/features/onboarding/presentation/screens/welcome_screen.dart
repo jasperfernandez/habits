@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../settings/application/settings_controller.dart';
@@ -110,7 +110,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "What should we call you?",
+                            'What should we call you?',
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,

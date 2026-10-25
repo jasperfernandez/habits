@@ -126,49 +126,56 @@ void main() {
       expect(streak, 1);
     });
 
-    test('handles selected weekdays correctly without breaking on rest days', () {
-      // 2026-10-19 is Monday (1)
-      // 2026-10-21 is Wednesday (3)
-      // 2026-10-23 is Friday (5)
-      // 2026-10-24 is Saturday (6)
-      final mwfHabit = Habit(
-        id: 'h2',
-        name: 'Gym',
-        frequency: HabitFrequency.selectedWeekdays,
-        scheduledWeekdays: const {DateTime.monday, DateTime.wednesday, DateTime.friday},
-        createdAt: DateTime(2026, 10, 1),
-        startDate: DateTime(2026, 10, 1),
-      );
+    test(
+      'handles selected weekdays correctly without breaking on rest days',
+      () {
+        // 2026-10-19 is Monday (1)
+        // 2026-10-21 is Wednesday (3)
+        // 2026-10-23 is Friday (5)
+        // 2026-10-24 is Saturday (6)
+        final mwfHabit = Habit(
+          id: 'h2',
+          name: 'Gym',
+          frequency: HabitFrequency.selectedWeekdays,
+          scheduledWeekdays: const {
+            DateTime.monday,
+            DateTime.wednesday,
+            DateTime.friday,
+          },
+          createdAt: DateTime(2026, 10, 1),
+          startDate: DateTime(2026, 10, 1),
+        );
 
-      final completions = [
-        HabitCompletion(
-          id: 'c1',
-          habitId: 'h2',
-          date: DateTime(2026, 10, 19),
-          completedAt: DateTime(2026, 10, 19),
-        ),
-        HabitCompletion(
-          id: 'c2',
-          habitId: 'h2',
-          date: DateTime(2026, 10, 21),
-          completedAt: DateTime(2026, 10, 21),
-        ),
-        HabitCompletion(
-          id: 'c3',
-          habitId: 'h2',
-          date: DateTime(2026, 10, 23),
-          completedAt: DateTime(2026, 10, 23),
-        ),
-      ];
+        final completions = [
+          HabitCompletion(
+            id: 'c1',
+            habitId: 'h2',
+            date: DateTime(2026, 10, 19),
+            completedAt: DateTime(2026, 10, 19),
+          ),
+          HabitCompletion(
+            id: 'c2',
+            habitId: 'h2',
+            date: DateTime(2026, 10, 21),
+            completedAt: DateTime(2026, 10, 21),
+          ),
+          HabitCompletion(
+            id: 'c3',
+            habitId: 'h2',
+            date: DateTime(2026, 10, 23),
+            completedAt: DateTime(2026, 10, 23),
+          ),
+        ];
 
-      // On Saturday Oct 24 (rest day), streak should still be 3
-      final streak = StreakCalculator.calculateStreak(
-        habit: mwfHabit,
-        completions: completions,
-        targetDate: DateTime(2026, 10, 24),
-      );
+        // On Saturday Oct 24 (rest day), streak should still be 3
+        final streak = StreakCalculator.calculateStreak(
+          habit: mwfHabit,
+          completions: completions,
+          targetDate: DateTime(2026, 10, 24),
+        );
 
-      expect(streak, 3);
-    });
+        expect(streak, 3);
+      },
+    );
   });
 }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habits/core/services/notification_permission_service.dart';
@@ -18,7 +18,8 @@ class _FakeHabitsController extends HabitsController {
   Stream<List<Habit>> build() => Stream.value(_habits);
 }
 
-class _FakeNotificationPermissionService implements NotificationPermissionService {
+class _FakeNotificationPermissionService
+    implements NotificationPermissionService {
   _FakeNotificationPermissionService({
     this.resultToReturn = NotificationPermissionResult.granted,
   });
@@ -67,7 +68,9 @@ void main() {
       ),
     ];
 
-    testWidgets('renders profile, preferences, stats, and about sections', (tester) async {
+    testWidgets('renders profile, preferences, stats, and about sections', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -123,83 +126,94 @@ void main() {
       expect(find.text('Alex'), findsOneWidget);
     });
 
-    testWidgets('requests OS permission when toggling daily reminders ON and enables on grant', (tester) async {
-      final fakePermissionService = _FakeNotificationPermissionService(
-        resultToReturn: NotificationPermissionResult.granted,
-      );
+    testWidgets(
+      'requests OS permission when toggling daily reminders ON and enables on grant',
+      (tester) async {
+        final fakePermissionService = _FakeNotificationPermissionService(
+          resultToReturn: NotificationPermissionResult.granted,
+        );
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            habitsControllerProvider.overrideWith(
-              () => _FakeHabitsController([]),
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              habitsControllerProvider.overrideWith(
+                () => _FakeHabitsController([]),
+              ),
+              notificationPermissionServiceProvider.overrideWithValue(
+                fakePermissionService,
+              ),
+            ],
+            child: MaterialApp(
+              theme: AppTheme.light,
+              home: const SettingsScreen(),
             ),
-            notificationPermissionServiceProvider.overrideWithValue(
-              fakePermissionService,
-            ),
-          ],
-          child: MaterialApp(
-            theme: AppTheme.light,
-            home: const SettingsScreen(),
           ),
-        ),
-      );
+        );
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      // Find switch tile for Daily Reminders
-      final switchFinder = find.byType(Switch);
-      expect(switchFinder, findsOneWidget);
+        // Find switch tile for Daily Reminders
+        final switchFinder = find.byType(Switch);
+        expect(switchFinder, findsOneWidget);
 
-      // Verify currently false
-      Switch switchWidget = tester.widget<Switch>(switchFinder);
-      expect(switchWidget.value, isFalse);
+        // Verify currently false
+        Switch switchWidget = tester.widget<Switch>(switchFinder);
+        expect(switchWidget.value, isFalse);
 
-      // Tap to toggle ON
-      await tester.tap(switchFinder);
-      await tester.pumpAndSettle();
+        // Tap to toggle ON
+        await tester.tap(switchFinder);
+        await tester.pumpAndSettle();
 
-      expect(fakePermissionService.requestCalled, isTrue);
-      switchWidget = tester.widget<Switch>(switchFinder);
-      expect(switchWidget.value, isTrue);
-      expect(find.text('Daily reminders enabled!'), findsOneWidget);
-    });
+        expect(fakePermissionService.requestCalled, isTrue);
+        switchWidget = tester.widget<Switch>(switchFinder);
+        expect(switchWidget.value, isTrue);
+        expect(find.text('Daily reminders enabled!'), findsOneWidget);
+      },
+    );
 
-    testWidgets('shows warning and keeps switch off when permission is denied', (tester) async {
-      final fakePermissionService = _FakeNotificationPermissionService(
-        resultToReturn: NotificationPermissionResult.denied,
-      );
+    testWidgets(
+      'shows warning and keeps switch off when permission is denied',
+      (tester) async {
+        final fakePermissionService = _FakeNotificationPermissionService(
+          resultToReturn: NotificationPermissionResult.denied,
+        );
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            habitsControllerProvider.overrideWith(
-              () => _FakeHabitsController([]),
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              habitsControllerProvider.overrideWith(
+                () => _FakeHabitsController([]),
+              ),
+              notificationPermissionServiceProvider.overrideWithValue(
+                fakePermissionService,
+              ),
+            ],
+            child: MaterialApp(
+              theme: AppTheme.light,
+              home: const SettingsScreen(),
             ),
-            notificationPermissionServiceProvider.overrideWithValue(
-              fakePermissionService,
-            ),
-          ],
-          child: MaterialApp(
-            theme: AppTheme.light,
-            home: const SettingsScreen(),
           ),
-        ),
-      );
+        );
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      final switchFinder = find.byType(Switch);
-      await tester.tap(switchFinder);
-      await tester.pumpAndSettle();
+        final switchFinder = find.byType(Switch);
+        await tester.tap(switchFinder);
+        await tester.pumpAndSettle();
 
-      expect(fakePermissionService.requestCalled, isTrue);
-      final switchWidget = tester.widget<Switch>(switchFinder);
-      expect(switchWidget.value, isFalse);
-      expect(find.text('Notification permission was not granted.'), findsOneWidget);
-    });
+        expect(fakePermissionService.requestCalled, isTrue);
+        final switchWidget = tester.widget<Switch>(switchFinder);
+        expect(switchWidget.value, isFalse);
+        expect(
+          find.text('Notification permission was not granted.'),
+          findsOneWidget,
+        );
+      },
+    );
 
-    testWidgets('shows settings action when permission is permanently denied', (tester) async {
+    testWidgets('shows settings action when permission is permanently denied', (
+      tester,
+    ) async {
       final fakePermissionService = _FakeNotificationPermissionService(
         resultToReturn: NotificationPermissionResult.permanentlyDenied,
       );
@@ -228,7 +242,10 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(fakePermissionService.requestCalled, isTrue);
-      expect(find.text('Settings'), findsNWidgets(2)); // AppBar title + SnackBar action
+      expect(
+        find.text('Settings'),
+        findsNWidgets(2),
+      ); // AppBar title + SnackBar action
 
       // Tap the SnackBar "Settings" action
       await tester.tap(find.text('Settings').last);
@@ -237,7 +254,9 @@ void main() {
       expect(fakePermissionService.openSettingsCalled, isTrue);
     });
 
-    testWidgets('shows reminder time tile when daily reminders is ON', (tester) async {
+    testWidgets('shows reminder time tile when daily reminders is ON', (
+      tester,
+    ) async {
       final inMemory = InMemoryPreferencesService(
         initialNotificationEnabled: true,
         initialReminderTime: const TimeOfDay(hour: 9, minute: 0),
@@ -261,7 +280,10 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Reminder Time'), findsOneWidget);
-      expect(find.text('When to receive your daily habit reminder'), findsOneWidget);
+      expect(
+        find.text('When to receive your daily habit reminder'),
+        findsOneWidget,
+      );
     });
   });
 }

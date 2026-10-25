@@ -5,11 +5,8 @@ import 'habits_table.dart';
 class HabitCompletions extends Table {
   TextColumn get id => text()();
 
-  TextColumn get habitId => text().references(
-        Habits,
-        #id,
-        onDelete: KeyAction.cascade,
-      )();
+  TextColumn get habitId =>
+      text().references(Habits, #id, onDelete: KeyAction.cascade)();
 
   DateTimeColumn get date => dateTime()();
 
@@ -20,6 +17,6 @@ class HabitCompletions extends Table {
 
   @override
   List<Set<Column<Object>>> get uniqueKeys => [
-        {habitId, date},
-      ];
+    {habitId, date},
+  ];
 }

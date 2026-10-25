@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_color_scheme.dart';
@@ -17,11 +17,7 @@ class MainScreen extends ConsumerWidget {
     return Scaffold(
       body: IndexedStack(
         index: currentIndex,
-        children: const [
-          TodayScreen(),
-          HabitsScreen(),
-          SettingsScreen(),
-        ],
+        children: const [TodayScreen(), HabitsScreen(), SettingsScreen()],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,

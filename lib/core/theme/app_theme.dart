@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'app_color_scheme.dart';
 
 abstract final class AppTheme {
@@ -56,10 +56,7 @@ abstract final class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: AppColors.primary,
-            width: 1.5,
-          ),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
       ),
 
@@ -70,9 +67,7 @@ abstract final class AppTheme {
       ),
 
       checkboxTheme: CheckboxThemeData(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
 
       navigationBarTheme: NavigationBarThemeData(
@@ -152,10 +147,7 @@ abstract final class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: scheme.primary,
-            width: 1.5,
-          ),
+          borderSide: BorderSide(color: scheme.primary, width: 1.5),
         ),
       ),
 
@@ -166,9 +158,7 @@ abstract final class AppTheme {
       ),
 
       checkboxTheme: CheckboxThemeData(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
 
       navigationBarTheme: NavigationBarThemeData(

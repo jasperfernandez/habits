@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract interface class PreferencesService {
@@ -108,10 +108,10 @@ class InMemoryPreferencesService implements PreferencesService {
     ThemeMode initialThemeMode = ThemeMode.light,
     bool initialNotificationEnabled = false,
     TimeOfDay initialReminderTime = const TimeOfDay(hour: 9, minute: 0),
-  })  : _userName = initialUserName,
-        _themeMode = initialThemeMode,
-        _notificationEnabled = initialNotificationEnabled,
-        _reminderTime = initialReminderTime;
+  }) : _userName = initialUserName,
+       _themeMode = initialThemeMode,
+       _notificationEnabled = initialNotificationEnabled,
+       _reminderTime = initialReminderTime;
 
   String? _userName;
   ThemeMode _themeMode;

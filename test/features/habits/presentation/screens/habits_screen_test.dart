@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habits/core/theme/app_theme.dart';
@@ -19,7 +19,11 @@ class _FakeHabitsController extends HabitsController {
   Stream<List<Habit>> build() => Stream.value(_habits);
 
   @override
-  Future<void> reorder(int oldIndex, int newIndex, List<Habit> activeHabits) async {
+  Future<void> reorder(
+    int oldIndex,
+    int newIndex,
+    List<Habit> activeHabits,
+  ) async {
     reorderedCalled = true;
   }
 
@@ -50,7 +54,11 @@ void main() {
         id: 'h2',
         name: 'Workout',
         frequency: HabitFrequency.selectedWeekdays,
-        scheduledWeekdays: const {DateTime.monday, DateTime.wednesday, DateTime.friday},
+        scheduledWeekdays: const {
+          DateTime.monday,
+          DateTime.wednesday,
+          DateTime.friday,
+        },
         createdAt: DateTime(2026, 10, 2),
         startDate: DateTime(2026, 10, 2),
         sortOrder: 1,
@@ -71,17 +79,17 @@ void main() {
     ];
 
     testWidgets('renders active habits tab with drag handles', (tester) async {
-      final fakeController = _FakeHabitsController([...activeHabits, ...archivedHabits]);
+      final fakeController = _FakeHabitsController([
+        ...activeHabits,
+        ...archivedHabits,
+      ]);
 
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             habitsControllerProvider.overrideWith(() => fakeController),
           ],
-          child: MaterialApp(
-            theme: AppTheme.light,
-            home: const HabitsScreen(),
-          ),
+          child: MaterialApp(theme: AppTheme.light, home: const HabitsScreen()),
         ),
       );
 
@@ -97,17 +105,17 @@ void main() {
     });
 
     testWidgets('shows archived tab and allows restore', (tester) async {
-      final fakeController = _FakeHabitsController([...activeHabits, ...archivedHabits]);
+      final fakeController = _FakeHabitsController([
+        ...activeHabits,
+        ...archivedHabits,
+      ]);
 
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             habitsControllerProvider.overrideWith(() => fakeController),
           ],
-          child: MaterialApp(
-            theme: AppTheme.light,
-            home: const HabitsScreen(),
-          ),
+          child: MaterialApp(theme: AppTheme.light, home: const HabitsScreen()),
         ),
       );
 
@@ -132,10 +140,7 @@ void main() {
           overrides: [
             habitsControllerProvider.overrideWith(() => fakeController),
           ],
-          child: MaterialApp(
-            theme: AppTheme.light,
-            home: const HabitsScreen(),
-          ),
+          child: MaterialApp(theme: AppTheme.light, home: const HabitsScreen()),
         ),
       );
 

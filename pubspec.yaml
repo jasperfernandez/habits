@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  material_ui: ^1.8.0
   cupertino_icons: ^1.0.8
   flutter_riverpod: ^3.4.3
   riverpod_annotation: ^4.0.7

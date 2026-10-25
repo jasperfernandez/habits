@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habits/core/services/local_notification_service.dart';
@@ -79,8 +79,14 @@ void main() {
           .read(settingsControllerProvider.notifier)
           .setNotificationEnabled(true);
 
-      expect(containerRef.read(settingsControllerProvider).notificationEnabled, isTrue);
-      expect(fakeNotifications.scheduledTime, const TimeOfDay(hour: 9, minute: 0));
+      expect(
+        containerRef.read(settingsControllerProvider).notificationEnabled,
+        isTrue,
+      );
+      expect(
+        fakeNotifications.scheduledTime,
+        const TimeOfDay(hour: 9, minute: 0),
+      );
       expect(fakeNotifications.scheduledTitle, contains('habits'));
 
       // Changing reminder time when enabled reschedules with new time
@@ -92,14 +98,20 @@ void main() {
         containerRef.read(settingsControllerProvider).reminderTime,
         const TimeOfDay(hour: 21, minute: 15),
       );
-      expect(fakeNotifications.scheduledTime, const TimeOfDay(hour: 21, minute: 15));
+      expect(
+        fakeNotifications.scheduledTime,
+        const TimeOfDay(hour: 21, minute: 15),
+      );
 
       // Disabling notifications cancels scheduled reminder
       await containerRef
           .read(settingsControllerProvider.notifier)
           .setNotificationEnabled(false);
 
-      expect(containerRef.read(settingsControllerProvider).notificationEnabled, isFalse);
+      expect(
+        containerRef.read(settingsControllerProvider).notificationEnabled,
+        isFalse,
+      );
       expect(fakeNotifications.canceled, isTrue);
       expect(fakeNotifications.scheduledTime, isNull);
     });
@@ -112,9 +124,7 @@ void main() {
       );
 
       final containerRef = ProviderContainer(
-        overrides: [
-          preferencesServiceProvider.overrideWithValue(inMemory),
-        ],
+        overrides: [preferencesServiceProvider.overrideWithValue(inMemory)],
       );
 
       expect(
