@@ -14,25 +14,16 @@ class HabitsController extends _$HabitsController {
   Future<void> create(Habit habit) async {
     final repository = ref.read(habitRepositoryProvider);
     await repository.create(habit);
-    if (ref.mounted) {
-      ref.invalidateSelf();
-    }
   }
 
   Future<void> archive(String id) async {
     final repository = ref.read(habitRepositoryProvider);
     await repository.archive(id);
-    if (ref.mounted) {
-      ref.invalidateSelf();
-    }
   }
 
   Future<void> unarchive(String id) async {
     final repository = ref.read(habitRepositoryProvider);
     await repository.unarchive(id);
-    if (ref.mounted) {
-      ref.invalidateSelf();
-    }
   }
 
   Future<void> reorder(
@@ -57,9 +48,6 @@ class HabitsController extends _$HabitsController {
   Future<void> delete(String id) async {
     final repository = ref.read(habitRepositoryProvider);
     await repository.delete(id);
-    if (ref.mounted) {
-      ref.invalidateSelf();
-    }
   }
 
   Future<void> toggleCompletion({
