@@ -285,5 +285,31 @@ void main() {
         findsOneWidget,
       );
     });
+
+    testWidgets('renders app logo in about section', (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            habitsControllerProvider.overrideWith(
+              () => _FakeHabitsController([]),
+            ),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.light,
+            home: const SettingsScreen(),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      final imageFinder = find.byType(Image);
+      expect(imageFinder, findsOneWidget);
+      final imageWidget = tester.widget<Image>(imageFinder);
+      expect(
+        (imageWidget.image as AssetImage).assetName,
+        'assets/icon/icon.png',
+      );
+    });
   });
 }

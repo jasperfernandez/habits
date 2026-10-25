@@ -8,7 +8,7 @@ import 'package:habits/features/settings/data/preferences_service.dart';
 
 void main() {
   group('WelcomeScreen', () {
-    testWidgets('renders welcome header, input, and options', (tester) async {
+    testWidgets('renders welcome header, logo, input, and options', (tester) async {
       final inMemory = InMemoryPreferencesService();
 
       await tester.pumpWidget(
@@ -28,6 +28,12 @@ void main() {
       expect(find.byType(TextFormField), findsOneWidget);
       expect(find.text('Habit Reminders'), findsNothing);
       expect(find.text('Get Started'), findsOneWidget);
+
+      // Verify app logo image is displayed
+      final imageFinder = find.byType(Image);
+      expect(imageFinder, findsOneWidget);
+      final imageWidget = tester.widget<Image>(imageFinder);
+      expect((imageWidget.image as AssetImage).assetName, 'assets/icon/icon.png');
     });
 
     testWidgets('validates required name field', (tester) async {

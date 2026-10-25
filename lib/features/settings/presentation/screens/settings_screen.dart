@@ -412,9 +412,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               borderRadius: BorderRadius.circular(16),
               side: const BorderSide(color: AppColors.outline),
             ),
-            child: const Column(
+            child: Column(
               children: [
-                ListTile(
+                const ListTile(
                   leading: Icon(
                     Icons.info_outline_rounded,
                     color: AppColors.textSecondary,
@@ -435,10 +435,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ),
                   ),
                 ),
-                Divider(height: 1),
+                const Divider(height: 1),
                 ListTile(
-                  leading: Icon(Icons.spa_outlined, color: AppColors.primary),
-                  title: Text(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      'assets/icon/icon.png',
+                      width: 28,
+                      height: 28,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  title: const Text(
                     'Habits',
                     style: TextStyle(
                       fontSize: 15,
@@ -446,7 +454,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  subtitle: Text(
+                  subtitle: const Text(
                     'Build positive routines, one day at a time.',
                     style: TextStyle(
                       fontSize: 12,

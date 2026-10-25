@@ -58,13 +58,25 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                       width: 88,
                       height: 88,
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primaryContainer,
-                        shape: BoxShape.circle,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: theme.colorScheme.primary.withAlpha(
+                              isDark ? 40 : 60,
+                            ),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
                       ),
-                      child: Icon(
-                        Icons.spa_rounded,
-                        size: 46,
-                        color: theme.colorScheme.primary,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.asset(
+                          'assets/icon/icon.png',
+                          width: 88,
+                          height: 88,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),

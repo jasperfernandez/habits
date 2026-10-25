@@ -97,12 +97,12 @@ abstract final class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
-      scaffoldBackgroundColor: const Color(0xFF101311),
+      scaffoldBackgroundColor: const Color(0xFF0E111B),
       fontFamily: 'Roboto',
 
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF101311),
-        foregroundColor: Color(0xFFE1E5DF),
+      appBarTheme: AppBarTheme(
+        backgroundColor: const Color(0xFF0E111B),
+        foregroundColor: scheme.onSurface,
         elevation: 0,
         centerTitle: false,
         scrolledUnderElevation: 0,
